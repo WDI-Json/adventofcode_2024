@@ -28,28 +28,36 @@ def calculate_score(board, drawn_numbers, last_number)
   unmarked_sum * last_number
 end
 
-# Draw numbers until there's a bingo
-def play_bingo(draw_numbers, boards)
+def play_until_last_bingo(draw_numbers, boards)
   drawn_numbers = []
+  remaining_boards = boards.dup # Copy of boards to track remaining ones
+  last_result = nil
 
   draw_numbers.each do |number|
     drawn_numbers << number
 
-    boards.each do |board|
+    remaining_boards.reject! do |board|
       if bingo?(board, drawn_numbers)
-        score = calculate_score(board, drawn_numbers, number)
-        return { board: board, score: score, last_number: number }
+        last_result = { 
+          board: board, 
+          score: calculate_score(board, drawn_numbers, number), 
+          last_number: number 
+        }
+        true # Remove this board from the remaining list
+      else
+        false
       end
     end
+
+    break if remaining_boards.empty?
   end
 
-  nil # No bingo found (unlikely with valid inputs)
+  last_result
 end
 
 
-result = play_bingo(draw_numbers, boards)
+result = play_until_last_bingo(draw_numbers, boards)
 
-# Output the results
 if result
   puts "Bingo on board:"
   result[:board].each { |row| puts row.join(" ") }
