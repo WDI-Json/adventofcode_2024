@@ -1,4 +1,3 @@
-# Read the input file into a string# Read the input file into a string
 input = File.readlines('input_d4.txt')
 grid = input.map(&:chars) 
 
@@ -12,14 +11,14 @@ count = 0
 
 # Horizontal search (left-to-right and right-to-left)
 grid.each do |row|
-  row_string = row.join # Convert the row back into a string
+  row_string = row.join 
   count += row_string.scan(/(?=#{target})/).count       
   count += row_string.scan(/(?=#{reverse_target})/).count
 end
 
 # Vertical search (top-to-bottom and bottom-to-top)
 (0...cols).each do |col|
-  vertical = grid.map { |row| row[col] }.join # Collect the column as a string
+  vertical = grid.map { |row| row[col] }.join 
   count += vertical.scan(/(?=#{target})/).count        
   count += vertical.scan(/(?=#{reverse_target})/).count
 end
@@ -58,5 +57,4 @@ diagonals(grid).each do |diag|
   count += diag.scan(/(?=#{reverse_target})/).count # Top-right to bottom-left
 end
 
-# Print the final count
 puts "Total occurrences of '#{target}': #{count}"
